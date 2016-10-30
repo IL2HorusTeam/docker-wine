@@ -1,7 +1,7 @@
 docker-wine
 ===========
 
-Description of docker image with Wine 1.9 based on Ubuntu 16.04.
+Docker image with Wine 1.9 based on Ubuntu 16.04.
 
 Docker pull command:
 
