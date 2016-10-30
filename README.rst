@@ -10,4 +10,4 @@ Docker pull command:
   docker pull il2horusteam/wine
   
   
-More info: https://hub.docker.com/r/il2horusteam/wine/
+`View on Docker Hub <https://hub.docker.com/r/il2horusteam/wine/>`_.
