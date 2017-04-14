@@ -6,17 +6,20 @@ RUN dpkg --add-architecture i386
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
+    apt-transport-https \
     software-properties-common \
-    python-software-properties
-
-RUN add-apt-repository ppa:wine/wine-builds
-
-RUN apt-get update \
- && apt-get install -y --install-recommends \
+    python-software-properties \
     wget \
     telnet \
     cabextract \
-    winehq-staging \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN wget --no-check-certificate https://dl.winehq.org/wine-builds/Release.key \
+ && apt-key add Release.key \
+ && apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
+
+RUN apt-get update \
+ && apt-get install -y --install-recommends winehq-stable \
  && rm -rf /var/lib/apt/lists/*
 
 ENV WINEARCH="win32"
