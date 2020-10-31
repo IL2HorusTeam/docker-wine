@@ -1,7 +1,7 @@
 docker-wine
 ===========
 
-Docker image with Wine based on Ubuntu 16.04.
+Docker image with 32-bit Wine 5.0 based on ``i386/debian:buster-slim``.
 
 Docker pull command:
 
@@ -10,4 +10,4 @@ Docker pull command:
   docker pull il2horusteam/wine
 
 
-`View on Docker Hub <https://hub.docker.com/r/il2horusteam/wine/>`_.
+`View on Docker Hub <https://hub.docker.com/r/il2horusteam/wine>`_.
