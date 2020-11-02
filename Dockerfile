@@ -40,8 +40,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && echo "deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10 ./" > /etc/apt/sources.list.d/obs.list \
  && { \
 	   echo "Package: *wine* *wine*:i386"; \
-		echo "Pin: version $WINEVERSION~buster"; \
-		echo "Pin-Priority: 1001"; \
+	   echo "Pin: version $WINEVERSION~buster"; \
+	   echo "Pin-Priority: 1001"; \
   } > /etc/apt/preferences.d/winehq.pref \
  && apt-get update \
  && apt-get install -y --no-install-recommends winehq-stable \

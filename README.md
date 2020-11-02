@@ -4,7 +4,7 @@ This repository contains a definition of a Docker image with `wine` 5.0 installe
 
 Its primary purpose is to be used to run 32-bit Windows applications.
 
-The image is based on `i386/debian:buster-slim`, which is 32-bit Debian Buster (Debian 10).
+The image is based on `i386/debian:buster-slim`, which is a 32-bit Debian Buster (Debian 10).
 
 While it's possible to build this image using 64-bit architecture and to run 32-bit apps in it, `wine` still will require 32-bit dependencies, which will just double the image size. Hence, for the sake of space usage, 32-bit architecture is used inside of the container.
 
