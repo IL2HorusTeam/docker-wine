@@ -1,44 +1,55 @@
 FROM i386/debian:buster-slim
 
-LABEL maintainer="Oleksandr Oblovatnyi <oblovatniy@gmail.com>"
+ARG WINEVERSION="5.0"
+ARG WINEUID=999
+ARG WINEGID=999
 
-ARG WINEARCH="win32"
-ARG WINEPREFIX="/root/.wine32"
-ARG WINE_VERSION="5.0"
+ENV WINEVERSION=$WINEVERSION
+ENV WINEHOME="/home/wine"
+ENV WINEPREFIX="$WINEHOME/.wine32"
+ENV WINEARCH="win32"
 
-ENV WINEARCH=$WINEARCH
-ENV WINEPREFIX=$WINEPREFIX
-ENV WINE_VERSION=$WINE_VERSION
+LABEL org.opencontainers.image.title="Wine"
+LABEL org.opencontainers.image.ref.name="il2horusteam/wine"
+LABEL org.opencontainers.image.url="https://hub.docker.com/r/il2horusteam/wine"
+LABEL org.opencontainers.image.authors="Oleksandr Oblovatnyi <oblovatniy@gmail.com>"
+LABEL org.opencontainers.image.description="Wine $WINEVERSION 32-bit"
 
-RUN dpkg --add-architecture i386 \
+RUN export DEBIAN_FRONTEND=noninteractive && \
+ && dpkg --add-architecture i386 \
  && apt-get update \
  && apt-get install -y --no-install-recommends \
-    apt-transport-https \
-    ca-certificates \
-    telnet \
-    cabextract \
-    gnupg2 \
-    wget \
+      apt-transport-https \
+      ca-certificates \
+      telnet \
+      cabextract \
+      gnupg2 \
+      wget \
+ && groupadd -g $WINEGID wine \
+ && useradd \
+      --system \
+      -u $WINEUID \
+      -g $WINEGID \
+      --shell /sbin/nologin \
+      --create-home --home-dir $WINEHOME \
+      wine \
  && mkdir -p $WINEPREFIX \
- && cd $WINEPREFIX \
  && wget https://dl.winehq.org/wine-builds/winehq.key -O - | apt-key add - \
  && echo "deb https://dl.winehq.org/wine-builds/debian buster main" > /etc/apt/sources.list.d/winehq.list \
  && wget https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/Release.key -O - | apt-key add - \
  && echo "deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10 ./" > /etc/apt/sources.list.d/obs.list \
  && { \
 	   echo "Package: *wine* *wine*:i386"; \
-		echo "Pin: version $WINE_VERSION~buster"; \
+		echo "Pin: version $WINEVERSION~buster"; \
 		echo "Pin-Priority: 1001"; \
   } > /etc/apt/preferences.d/winehq.pref \
  && apt-get update \
  && apt-get install -y --no-install-recommends winehq-stable \
+ && wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks -O /usr/bin/winetricks \
+ && chmod +rx /usr/bin/winetricks \
  && wine wineboot --init \
- && wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
- && chmod +x winetricks \
- && sh ./winetricks d3dx9 corefonts \
+ && winetricks d3dx9 corefonts \
  && apt purge --auto-remove -y \
-   software-properties-common \
-   gnupg2 \
-   wget \
  && apt autoremove --purge -y \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && chown -R wine:wine $WINEHOME
