@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.url="https://hub.docker.com/r/il2horusteam/wine"
 LABEL org.opencontainers.image.authors="Oleksandr Oblovatnyi <oblovatniy@gmail.com>"
 LABEL org.opencontainers.image.description="Wine $WINEVERSION 32-bit"
 
-RUN export DEBIAN_FRONTEND=noninteractive && \
+RUN export DEBIAN_FRONTEND=noninteractive \
  && dpkg --add-architecture i386 \
  && apt-get update \
  && apt-get install -y --no-install-recommends \
